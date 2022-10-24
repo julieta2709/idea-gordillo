@@ -165,6 +165,15 @@ let paises = [{
     },
 ]
 
+document.addEventListener('DOMContentLoaded', () => {
+    paisesSeleccionados = JSON.parse(localStorage.getItem('paises')) || []
+    agregarPaisAlCarro()
+})
+
+function sincronizarConLocalStorage() {
+    localStorage.setItem("paises", JSON.stringify(paisesSeleccionados));
+}
+
 function printdata(object) {
     object.forEach((element) => {
         insertDOMcontent.innerHTML += `<div class="col-md-3">
@@ -173,23 +182,36 @@ function printdata(object) {
     <div class="card-body">
       <h5 class="card-title">${element.pais}</h5>
       <p class="card-text">Seleccione la cantidad de figuritas que tiene de este país.</p>
-      <a href="#" class="btn btn-secondary" id="${element._id}">Agregar al album</a>
+      <a href="#" class="btn btn-secondary agregar-album" id="${element._id}">Agregar al album</a>
     </div>
   </div>
   </div>`
     });
 }
 
-function agregarPaisAlCarro (){
-listapaises.innerHTML = ``
-paisesSeleccionados.forEach ((element,index)=>{
-listapaises.innerHTML=`<tr>
+function agregarPaisAlCarro() {
+    listapaises.innerHTML = ``
+    paisesSeleccionados.forEach((element, index) => {
+        listapaises.innerHTML += `<tr>
 <td><img class="imgminiatura" src="${element.bandera}" alt="${element.pais}"></td>
 <td class="text-center">${element.pais}</td>
 <td class="text-center" >Cantidad de Figuritas</td>
 <td class="text-center"><a href="#" id="${element._id}" class="borrar-pais">X</a></td>
 </tr>`
-})
+    })
+
+    let buttonDelete = document.querySelectorAll('#listapaises tr td a');
+    buttonDelete.forEach(element => {
+        element.addEventListener('click', (e) => {
+            e.preventDefault();
+            let id = e.target.id;
+            paisesSeleccionados = paisesSeleccionados.filter(pais => pais._id !== id)
+            agregarPaisAlCarro()
+        })
+    })
+
+    sincronizarConLocalStorage();
+
 }
 
 function buscarPais(idPais, buscarPaises) {
@@ -198,7 +220,7 @@ function buscarPais(idPais, buscarPaises) {
     let pais = []
     pais.push(paisSeleccionado)
     paisesSeleccionados = [...paisesSeleccionados, ...pais]
-    agregarPaisAlCarro ();
+    agregarPaisAlCarro();
 
 }
 
