@@ -230,11 +230,13 @@ function agregarPaisAlCarro() {
 <td><img class="imgminiatura" src="${element.bandera}" alt="${element.pais}"></td>
 <td class="text-center">${element.pais}</td>
 <td class="text-center" >${element.cantidad}</td>
+<td class="text-center"><a href="#" id="${element._id}" class="sumar-pais" data-id="1">+</a></td>
+<p class="text-right">Total: <span id="total"></span>Figuritas</p>
 <td class="text-center"><a href="#" id="${element._id}" class="borrar-pais" data-id="1">X</a></td>
 </tr>`
     });
 
-    let buttonDelete = document.querySelectorAll('#listapaises tr td a');
+    let buttonDelete = document.querySelectorAll('.borrar-pais');
     buttonDelete.forEach(element => {
         element.addEventListener('click', (e) => {
             e.preventDefault();
@@ -247,6 +249,7 @@ function agregarPaisAlCarro() {
     sincronizarConLocalStorage();
 
 }
+
 
 function buscarPais(idPais, buscarPaises) {
     let paisSeleccionado = buscarPaises.find(element => idPais == element._id)
